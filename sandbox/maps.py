@@ -35,11 +35,40 @@ print """
 				document.getElementById("value").innerHTML=poi;
 				document.getElementById("coord").value=poi;
 				document.getElementById("tog").disabled=false;
+				if (i == 1) {
+					removeMarker();
+					addMarker();
+				}
 			});
+
+			markers = new Array();
+
+			if (sessionStorage.length != 0) {
+				var data = (sessionStorage.getItem('results'));
+				var results = data.split(",");
+
+				for (var j = 0; j < results.length; j++) {
+					record = results[j].replace("(","");
+					record = results[j].replace(")","")
+//					document.getElementById("value").innerHTML=record;
+					row = record.split("|");
+					poi = new google.maps.LatLng(row[1], row[2]);
+					if (j == 0) {
+						origin = poi;
+					}
+					document.getElementById("value").innerHTML=poi;
+					markers[j] = new google.maps.Marker({position: poi, map: map});
+					markers[j].setMap(map);
+				}
+				i = 1;
+				map.setCenter(origin);
+				map.setZoom(14);
+			}
 		}
 
 		function addMarker() {
-			marker = new google.maps.Marker({
+			sessionStorage.clear();
+			markers[markers.length] = new google.maps.Marker({
 				position: poi,
 				map: map
 			});
@@ -57,9 +86,12 @@ print """
 		}
 
 		function removeMarker() {
-			marker.setMap(null);
+			for (j = 0; j < markers.length; j++) {
+				markers[j].setMap(null);
+			}
 			i = 0;
 		}
+
 
 </script>
 </head>
