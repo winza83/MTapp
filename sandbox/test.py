@@ -53,6 +53,7 @@ for record in jdata:
 	i = i + 1
 
 print "sessionStorage.setItem('results',data);"
+print "sessionStorage.setItem('rawdata', JSON.stringify(" + doc + "));"
 print """
 	window.location = 'maps.py';
 """
