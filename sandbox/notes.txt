@@ -1,7 +1,0 @@
-personal project May 2014
--- Initially a web application.
--- uses python as scripting engine
-
--- features
--- click on map to get location
--- http://stevage.github.io/PTV-API-doc/#header1
