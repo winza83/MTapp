@@ -77,7 +77,7 @@ class Trans(object):
 		try:
 			doc = url.urlopen(request)
 			data = j.load(doc)
-			return data
+			return str(j.dumps(data, indent=4))
 		except Exception:
 			print "something is wrong"
 
