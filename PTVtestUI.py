@@ -6,10 +6,10 @@ cgitb.enable()
 
 form = cgi.FieldStorage()
 
-googleKey = 'AIzaSyDejfQWInSUrLPFX8iTFQ0fBm62RdKPLNo'
+googleKey = 'your key here'
 baseurl = "http://timetableapi.ptv.vic.gov.au"
-key = '29246674-a96c-11e3-8bed-0263a9d0b8a0'
-devid=1000050
+key = 'your key here'
+devid=your dev id
 test = P.Trans('AIzaSyDejfQWInSUrLPFX8iTFQ0fBm62RdKPLNo', '29246674-a96c-11e3-8bed-0263a9d0b8a0', 1000050)
 
 print "Content-type: text/html \n"
