@@ -81,3 +81,31 @@ class Trans(object):
 		except Exception:
 			print "something is wrong"
 
+	def delegator(self, method, param):
+		reqstr = ""
+		if (method == 'stopsNearBy'):
+			a, b = param
+			reqstr = self.stopsNearBy(a,b)
+		elif (method == 'search'):
+			a = param[0]
+			reqstr = self.search(a)
+		elif (method == 'POI'):
+			a, b, c, d, e, f, g = param
+			reqstr = self.POI(a, b, c, d, e, f, g)
+		elif (method == 'BND'):
+			a, b, c = param
+			reqstr = self.BND(a, b, c)
+		elif (method == 'SND'):
+			a, b, c, d, e = param
+			if len(param) == 6:
+				f = param[5]
+				reqstr = self.SND(a, b, c, d, e, f)
+			else:
+				reqstr = self.SND(a, b, c, d, e)
+		elif (method == 'stoppingPattern'):
+			a, b, c, d = param
+			reqstr = stoppingPattern(a, b, c, d)
+		elif (method == 'stopsOnLine'):
+			stopsOnLine(a, b, c, d)
+			reqstr = a, b = param
+		return reqstr
