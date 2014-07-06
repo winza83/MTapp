@@ -96,11 +96,11 @@ class Trans(object):
 			a, b, c = param
 			reqstr = self.BND(a, b, c)
 		elif (method == 'SND'):
-			a, b, c, d, e = param
 			if len(param) == 6:
-				f = param[5]
+				a, b, c, d, e, f = param
 				reqstr = self.SND(a, b, c, d, e, f)
 			else:
+				a, b, c, d, e = param
 				reqstr = self.SND(a, b, c, d, e)
 		elif (method == 'stoppingPattern'):
 			a, b, c, d = param

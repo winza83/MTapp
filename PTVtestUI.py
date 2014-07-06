@@ -7,10 +7,10 @@ cgitb.enable()
 
 form = cgi.FieldStorage()
 
-googleKey = 'AIzaSyDejfQWInSUrLPFX8iTFQ0fBm62RdKPLNo'
+googleKey = yourgooglekey
 baseurl = "http://timetableapi.ptv.vic.gov.au"
-key = '29246674-a96c-11e3-8bed-0263a9d0b8a0'
-devid = 1000050
+key = yourptvkey
+devid = yourdevid
 test = P.Trans(googleKey, key, devid)
 
 print "Content-type: text/html \n"
@@ -119,14 +119,18 @@ elif form.getvalue('methods') == 'POI':
 	griddepth, limit, poi = form.getvalue("griddepth"), form.getvalue("limit"), form.getvalue("pois")
 	reqstr = test.delegator('POI', [poi, lat1, lng1, lat2, lng2, griddepth, limit])
 elif form.getvalue('methods') == 'BND':
-	mode, stop, limit = form.getvalue('poisND'), form.getvalue('stop'), (form.getvalue('limit'))[1]	#1st elem because it is the second limit input field
+	mode, stop, limit = form.getvalue('poisND'), form.getvalue('stop')[0], (form.getvalue('limit'))[1]	#1st elem because it is the second limit input field
 	reqstr = test.delegator('BND', [mode, stop, limit])
-
-if ('reqstr' in locals() or 'reqstr' in globals()) and len(reqstr) > 0:
+elif form.getvalue('methods') == 'SND':
+	mode, lineid, stopid = form.getvalue('poiSND'), form.getvalue('lineid'), (form.getvalue('stop'))[1]
+	directionid, limitid, time = form.getvalue('directionid'), (form.getvalue('limit'))[2], form.getvalue('time')
+	reqstr = test.delegator('SND', [mode, lineid, stopid, directionid, limitid, time])
+if ('reqstr' in locals() or 'reqstr' in globals()) and len(reqstr) > 0 and type(reqstr) is not None:
 	print "document.getElementById('request').innerHTML = '" + reqstr + "';"
 	data = test.getData(reqstr)
 	pretty = (str(data.encode('utf-8'))).replace("\n","\\n")
 	print "document.getElementById('results').value = '" + pretty +"';"
+
 print """
 		}
 	}

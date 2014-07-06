@@ -1,5 +1,5 @@
 #! /usr/bin/python
-
+from datetime import datetime
 def setModeInputGeneral():
 	print """
 	<option value="0">Train</option>
@@ -76,6 +76,7 @@ def setInputContainer():
 	twosearchByAddress()
 	threePOI()
 	fourBND()
+	fiveSND()
 	print """
 	<input type="submit" />
 	</form>
@@ -94,7 +95,6 @@ def fourBND():
 
 def	setStopInput():
 	print "<input id='stop' name='stop' type='text' value='1108' />"
-
 
 def output():
 	print """
@@ -115,3 +115,18 @@ def setLayout():
 	reqStr()
 	print "</div>"
 	output()
+
+def fiveSND():
+	print "<fieldset id = 'five'>"
+	print "transport type:<br /> <select size='6' name='poiSND' id='poiSND'>"
+	setModeInputGeneral()
+	print "</select><br />"
+	print "line id: "
+	print "<input type='number' id='lineid', name='lineid', value='1' /><br /> "
+	print "stop id: "
+	setStopInput()
+	print "direction id: <input type='number' id='directionid', name='directionid', value='1' /><br /> "
+	setLimitInput()
+	currenttime = (datetime.utcnow().isoformat('T'))[0:19] + 'Z'
+	print "for utc: <input type='text' id='time' name='time' value='" + currenttime + "' /><br /> "
+	print "</fieldset>"
