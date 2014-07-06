@@ -2,14 +2,15 @@
 import PTVfactory as P
 import cgi
 import cgitb
+import layout
 cgitb.enable()
 
 form = cgi.FieldStorage()
 
-googleKey = yourgooglekey
-key = yourkey
+googleKey = 'AIzaSyDejfQWInSUrLPFX8iTFQ0fBm62RdKPLNo'
 baseurl = "http://timetableapi.ptv.vic.gov.au"
-devid = yourdevid
+key = '29246674-a96c-11e3-8bed-0263a9d0b8a0'
+devid = 1000050
 test = P.Trans(googleKey, key, devid)
 
 print "Content-type: text/html \n"
@@ -19,6 +20,7 @@ print "<title>PTV test harness</title>"
 print """
 	<link rel="stylesheet" href="styles.css" type="text/css" />
 	<title>Testing PTV API</title>
+	<script type="text/javascript" src="jquery/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
 	<script type="text/javascript">
 		var drawman = new google.maps.drawing.DrawingManager({
@@ -56,7 +58,6 @@ print """
 
 			google.maps.event.addListener(drawman, 'rectanglecomplete', function(event) {
 			  if (event.type == google.maps.RECTANGLE) {
-				alert("here");
 				var y2 = event.getBounds().getNorthEast().lat();
 				var x2 = event.getBounds().getNorthEast().lng();
 				var y1 = event.getBounds().getSouthWest().lat();
@@ -114,14 +115,12 @@ elif form.getvalue('methods') == 'search':
 	searchstr = str(form.getvalue('searchstr'))
 	reqstr = test.delegator('search', [searchstr])
 elif form.getvalue('methods') == 'POI':
-	lat1 = form.getvalue("y2")
-	lng1 = form.getvalue("x1")
-	lat2 = form.getvalue("y1")
-	lng2 = form.getvalue("x2")
-	griddepth = form.getvalue("griddepth")
-	limit = form.getvalue("limit")
-	poi = form.getvalue("pois")
+	lat1, lng1, lat2, lng2 = form.getvalue("y2"), form.getvalue("x1"), form.getvalue("y1"), form.getvalue("x2")
+	griddepth, limit, poi = form.getvalue("griddepth"), form.getvalue("limit"), form.getvalue("pois")
 	reqstr = test.delegator('POI', [poi, lat1, lng1, lat2, lng2, griddepth, limit])
+elif form.getvalue('methods') == 'BND':
+	mode, stop, limit = form.getvalue('poisND'), form.getvalue('stop'), (form.getvalue('limit'))[1]	#1st elem because it is the second limit input field
+	reqstr = test.delegator('BND', [mode, stop, limit])
 
 if ('reqstr' in locals() or 'reqstr' in globals()) and len(reqstr) > 0:
 	print "document.getElementById('request').innerHTML = '" + reqstr + "';"
@@ -135,51 +134,6 @@ print """
 	</script>
 	</head>
 	<body onload="startUp()">
-		<div id="container">
-			<form id="API" method="POST" action="PTVtestUI.py" onSubmit="loadSession();">
-				<select name="methods" OnChange="changeFields(this.selectedIndex)">
-					<option value="stopsNearBy">Stops Near By</option>
-					<option value="search">Search By Address</option>
-					<option value="POI">Search Points of Interest</option>
-					<option value="BND">Broad Next Departures</option>
-					<option value="SND">Specific Next Departures</option>
-					<option value="stoppingPattern">Stopping Pattern</option>
-					<option value="stopsOnLine">Stops on Line</option>
-				</select>
-				<fieldset id="one">
-					lat: <input type="text" id="lat1" name="lat1" />
-					lng: <input type="text" id="lng1" name="lng1" />
-				</fieldset>
-				<fieldset id="two">
-					address: <input type="text" width="100" id="searchstr" name="searchstr" />
-				</fieldset>
-				<fieldset id="three">
-					<table>
-					<tr><td>lat1:</td><td> <input type="text" id="x1" name="x1" /></td><td>transport type:</td></tr>
-					<tr><td>lng1:</td><td> <input type="text" id="y1" name="y1" /></td>
-					<td rowspan="6"><select size="6" name="pois" id="pois" multiple>
-							<option value="0">Train</option>
-							<option value="1">Tram</option>
-							<option value="2">Bus</option>
-							<option value="3">V/Line train or coach</option>
-							<option value="4">Nightrider</option>
-							<option value="100">Ticket outlet</option>
-							</select></td></tr>
-					<tr><td>lat2:</td><td> <input type="text" id="x2" name="x2" /></td></tr>
-					<tr><td>lng2:</td><td> <input type="text" id="y2" name="y2" /></td></tr>
-					<tr><td>grid depth:</td><td> <input type=number" id="griddepth" name="griddepth" value="1" /></td></tr>
-					<tr><td>limit:</td><td> <input type=number" id="limit" name="limit" value="1" /></td></tr>
-					</table>
-				</fieldset>
-				<input type="submit" />
-			</form>
-		<div id="mapdiv"></div>
-		<textarea id="request" cols="100" rows="5"></textarea>
-		</div>
-
-		<textarea id="results" cols="100" rows="85">
-		</textarea>
-
-	</body>
-	</html>
 """
+layout.setLayout()
+print "</body></html>"
