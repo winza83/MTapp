@@ -104,8 +104,8 @@ class Trans(object):
 				reqstr = self.SND(a, b, c, d, e)
 		elif (method == 'stoppingPattern'):
 			a, b, c, d = param
-			reqstr = stoppingPattern(a, b, c, d)
+			reqstr = self.stoppingPattern(a, b, c, d)
 		elif (method == 'stopsOnLine'):
-			stopsOnLine(a, b, c, d)
-			reqstr = a, b = param
+			a, b = param
+			reqstr = self.stopsOnLine(a, b)
 		return reqstr

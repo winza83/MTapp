@@ -69,6 +69,8 @@ def threePOI():
 
 def setInputContainer():
 	print """
+	<h2>Input</h2>
+	<div id="inputs">
 	<form id="API" method="POST" action="PTVtestUI.py" onSubmit="loadSession();">
 	"""
 	setMethodInput()
@@ -77,9 +79,12 @@ def setInputContainer():
 	threePOI()
 	fourBND()
 	fiveSND()
+	sixStopPat()
+	sevenLineStop()
 	print """
 	<input type="submit" />
 	</form>
+	</div>
 	"""
 
 def fourBND():
@@ -98,23 +103,31 @@ def	setStopInput():
 
 def output():
 	print """
+	<h2>Json Output</h2>
+	<div id="output">
 	<textarea id="results" cols="100" rows="40">
 	</textarea>
+	</div>
 	"""
 
 def reqStr():
-	print "<textarea id='request' cols='100' rows='5'></textarea>"
+	print """<h2>Request String</h2>
+	<div id='requeststring'><textarea id='request' cols='140' rows='5'></textarea></div>
+	"""
 
 def mapBlock():
-	print "<div id='mapdiv'></div>"
+	print """<h2>Visualise</h2>
+	<div id='mapdiv'></div>"""
 
 def setLayout():
-	print """<div id="container">"""
-	setInputContainer()
+	print """
+		<div id="accordion">
+	"""
 	mapBlock()
+	setInputContainer()
 	reqStr()
-	print "</div>"
 	output()
+	print "</div>"
 
 def fiveSND():
 	print "<fieldset id = 'five'>"
@@ -129,4 +142,26 @@ def fiveSND():
 	setLimitInput()
 	currenttime = (datetime.utcnow().isoformat('T'))[0:19] + 'Z'
 	print "for utc: <input type='text' id='time' name='time' value='" + currenttime + "' /><br /> "
+	print "</fieldset>"
+
+def sixStopPat():
+	print "<fieldset id = 'six'>"
+	print "transport type: <br /><select size='5' name='poiSL' id='poiSL'><br/>"
+	setModeInputGeneral()
+	print "</select><br />"
+	print "stop id: "
+	setStopInput()
+	print "<br/>run id: "
+	print "<input type='number' id='runid', name='runid', value='1464' /><br /> "
+	currenttime = (datetime.utcnow().isoformat('T'))[0:19] + 'Z'
+	print "for utc: <input type='text' id='time' name='time' value='" + currenttime + "' /><br /> "
+	print "</fieldset>"
+
+def sevenLineStop():
+	print "<fieldset id = 'seven'>"
+	print "transport type: <br /><select size='5' name='poiSL2' id='poiSL2'>"
+	setModeInputGeneral()
+	print "</select><br >"
+	print "line id:"
+	print "<input type='number' id='lineidS', name='lineidS', value='1' /><br /> "
 	print "</fieldset>"

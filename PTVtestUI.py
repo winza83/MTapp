@@ -7,10 +7,10 @@ cgitb.enable()
 
 form = cgi.FieldStorage()
 
-googleKey = yourgooglekey
+googleKey = ''
 baseurl = "http://timetableapi.ptv.vic.gov.au"
-key = yourptvkey
-devid = yourdevid
+key = ''
+devid = ####
 test = P.Trans(googleKey, key, devid)
 
 print "Content-type: text/html \n"
@@ -22,7 +22,21 @@ print """
 	<title>Testing PTV API</title>
 	<script type="text/javascript" src="jquery/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+	<script type="text/javascript" src="jquery/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script type="text/javascript">
+		$(function() {
+			$( "#accordion" ).accordion({
+				heightStyle: "content"
+			});
+		  });
+		$(function() {
+		$( "#accordion-resizer" ).resizable({
+	      resize: function() {
+    	    $( "#accordion" ).accordion( "refresh" );
+      	}
+	    });
+	    });
+
 		var drawman = new google.maps.drawing.DrawingManager({
 			drawingControl: true,
 		 	drawingControlOptions: {drawingModes: [google.maps.drawing.OverlayType.RECTANGLE]}
@@ -123,13 +137,19 @@ elif form.getvalue('methods') == 'BND':
 	reqstr = test.delegator('BND', [mode, stop, limit])
 elif form.getvalue('methods') == 'SND':
 	mode, lineid, stopid = form.getvalue('poiSND'), form.getvalue('lineid'), (form.getvalue('stop'))[1]
-	directionid, limitid, time = form.getvalue('directionid'), (form.getvalue('limit'))[2], form.getvalue('time')
+	directionid, limitid, time = form.getvalue('directionid'), (form.getvalue('limit'))[2], form.getvalue('time')[0]
 	reqstr = test.delegator('SND', [mode, lineid, stopid, directionid, limitid, time])
+elif form.getvalue('methods') == 'stoppingPattern':
+	mode, stopid, runid, time = form.getvalue('poiSL'), form.getvalue('stop')[2], form.getvalue('runid'), form.getvalue('time')[ 1]
+	reqstr = test.delegator('stoppingPattern', [mode, stopid, runid, time])
+elif form.getvalue('methods') == 'stopsOnLine':
+	mode, lineid = form.getvalue('poiSL2'), form.getvalue('lineidS')
+	reqstr = test.delegator('stopsOnLine', [mode, lineid])
 if ('reqstr' in locals() or 'reqstr' in globals()) and len(reqstr) > 0 and type(reqstr) is not None:
 	print "document.getElementById('request').innerHTML = '" + reqstr + "';"
 	data = test.getData(reqstr)
-	pretty = (str(data.encode('utf-8'))).replace("\n","\\n")
-	print "document.getElementById('results').value = '" + pretty +"';"
+	pretty = ((str(data.encode('utf-8'))).replace("\n","\\n")).replace("\'","\\'")
+	print """document.getElementById('results').value = '%s';"""%(pretty)
 
 print """
 		}
