@@ -77,9 +77,12 @@ class Trans(object):
 		try:
 			doc = url.urlopen(request)
 			data = j.load(doc)
-			return str(j.dumps(data, indent=4))
+			return data
 		except Exception:
 			print "something is wrong"
+
+	def readableData(self, data):
+		return str(j.dumps(data, indent=4))
 
 	def delegator(self, method, param):
 		reqstr = ""

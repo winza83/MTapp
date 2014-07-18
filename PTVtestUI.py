@@ -3,6 +3,8 @@ import PTVfactory as P
 import cgi
 import cgitb
 import layout
+import attribute
+
 cgitb.enable()
 
 form = cgi.FieldStorage()
@@ -10,7 +12,7 @@ form = cgi.FieldStorage()
 googleKey = ''
 baseurl = "http://timetableapi.ptv.vic.gov.au"
 key = ''
-devid = ####
+devid = number
 test = P.Trans(googleKey, key, devid)
 
 print "Content-type: text/html \n"
@@ -130,7 +132,11 @@ elif form.getvalue('methods') == 'search':
 	reqstr = test.delegator('search', [searchstr])
 elif form.getvalue('methods') == 'POI':
 	lat1, lng1, lat2, lng2 = form.getvalue("y2"), form.getvalue("x1"), form.getvalue("y1"), form.getvalue("x2")
-	griddepth, limit, poi = form.getvalue("griddepth"), form.getvalue("limit"), form.getvalue("pois")
+	griddepth = form.getvalue("griddepth")
+	limit = form.getvalue("limit")[0]
+	poi = []
+	for i in form.getvalue("pois"):
+		poi.append(int(i))
 	reqstr = test.delegator('POI', [poi, lat1, lng1, lat2, lng2, griddepth, limit])
 elif form.getvalue('methods') == 'BND':
 	mode, stop, limit = form.getvalue('poisND'), form.getvalue('stop')[0], (form.getvalue('limit'))[1]	#1st elem because it is the second limit input field
@@ -148,9 +154,11 @@ elif form.getvalue('methods') == 'stopsOnLine':
 if ('reqstr' in locals() or 'reqstr' in globals()) and len(reqstr) > 0 and type(reqstr) is not None:
 	print "document.getElementById('request').innerHTML = '" + reqstr + "';"
 	data = test.getData(reqstr)
-	pretty = ((str(data.encode('utf-8'))).replace("\n","\\n")).replace("\'","\\'")
+	readabledata = test.readableData(data)
+	pretty = ((str(readabledata.encode('utf-8'))).replace("\n","\\n")).replace("\'","\\'")
 	print """document.getElementById('results').value = '%s';"""%(pretty)
-
+	print "document.getElementById('api').innerHTML = 'API used: " + form.getvalue('methods') + "';"
+	attribute.map(form.getvalue('methods'));
 print """
 		}
 	}

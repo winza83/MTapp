@@ -1,12 +1,14 @@
 #mapdiv {
-	width: 100%;
+	width: 60%;
 	height: 450px;
+	float: right;
 	background-color: #00FF00;
 	display: block;
 }
 
-#container {
-	width: 100%;
+#accordion {
+	display: block;
+	width: 35%;
 }
 
 body {
@@ -48,7 +50,7 @@ height: 250px;
 
 #accordion-resizer {
     padding: 10px;
-    width: 350px;
+    width: 200px;
     height: 220px;
   }
 
@@ -56,6 +58,7 @@ h2 {
 background-color: #F2E4DC;
 padding: 5px;
 }
+
 
 body {
 background-color: #D9BEA7;

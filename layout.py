@@ -105,29 +105,30 @@ def output():
 	print """
 	<h2>Json Output</h2>
 	<div id="output">
-	<textarea id="results" cols="100" rows="40">
+	<textarea id="results" cols="60" rows="40">
 	</textarea>
 	</div>
 	"""
 
 def reqStr():
 	print """<h2>Request String</h2>
-	<div id='requeststring'><textarea id='request' cols='140' rows='5'></textarea></div>
+	<div id='requeststring'><textarea id='request' cols='60' rows='5'></textarea></div>
 	"""
 
 def mapBlock():
-	print """<h2>Visualise</h2>
+	print """
 	<div id='mapdiv'></div>"""
 
 def setLayout():
+	mapBlock()
 	print """
 		<div id="accordion">
 	"""
-	mapBlock()
 	setInputContainer()
 	reqStr()
 	output()
 	print "</div>"
+	print "<p id='api'></p>"
 
 def fiveSND():
 	print "<fieldset id = 'five'>"
